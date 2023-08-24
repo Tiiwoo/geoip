@@ -1,4 +1,4 @@
-module github.com/Tiiwoo/geoip
+module github.com/Loyalsoldier/geoip
 
 go 1.19
 
