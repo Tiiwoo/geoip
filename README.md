@@ -10,7 +10,5 @@
 
 ### MaxMind mmdb 格式文件
 
-- **Country.mmdb**：
+- **Country.mmdb**（精简版 GeoIP，只包含 `GEOIP,CN`）：
   - [https://raw.githubusercontent.com/Tiiwoo/geoip/release/Country.mmdb](https://raw.githubusercontent.com/Tiiwoo/geoip/release/Country.mmdb)
-- **Country-only-cn.mmdb**（精简版 GeoIP，只包含 `GEOIP,CN`）：
-  - [https://raw.githubusercontent.com/Tiiwoo/geoip/release/Country-only-cn-private.mmdb](https://raw.githubusercontent.com/Tiiwoo/geoip/release/Country-only-cn.mmdb)
