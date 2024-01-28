@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Loyalsoldier/geoip/lib"
+	"github.com/Tiiwoo/geoip/lib"
 )
 
 const (

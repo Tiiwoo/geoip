@@ -4,18 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"log"
-	"net"
 	"os"
 	"path/filepath"
 
-	"github.com/Loyalsoldier/geoip/lib"
+	"github.com/Tiiwoo/geoip/lib"
 )
 
 var (
-	defaultOutputDirForTextOut                  = filepath.Join("./", "output", "text")
-	defaultOutputDirForClashRuleSetClassicalOut = filepath.Join("./", "output", "clash", "classical")
-	defaultOutputDirForClashRuleSetIPCIDROut    = filepath.Join("./", "output", "clash", "ipcidr")
-	defaultOutputDirForSurgeRuleSetOut          = filepath.Join("./", "output", "surge")
+	defaultOutputDirForTextOut = filepath.Join("./", "output", "text")
 )
 
 type textOut struct {
@@ -44,12 +40,6 @@ func newTextOut(iType string, action lib.Action, data json.RawMessage) (lib.Outp
 		switch iType {
 		case typeTextOut:
 			tmp.OutputDir = defaultOutputDirForTextOut
-		case typeClashRuleSetClassicalOut:
-			tmp.OutputDir = defaultOutputDirForClashRuleSetClassicalOut
-		case typeClashRuleSetIPCIDROut:
-			tmp.OutputDir = defaultOutputDirForClashRuleSetIPCIDROut
-		case typeSurgeRuleSetOut:
-			tmp.OutputDir = defaultOutputDirForSurgeRuleSetOut
 		}
 	}
 
@@ -83,12 +73,6 @@ func (t *textOut) marshalBytes(entry *lib.Entry) ([]byte, error) {
 	switch t.Type {
 	case typeTextOut:
 		err = t.marshalBytesForTextOut(&buf, entryCidr)
-	case typeClashRuleSetClassicalOut:
-		err = t.marshalBytesForClashRuleSetClassicalOut(&buf, entryCidr)
-	case typeClashRuleSetIPCIDROut:
-		err = t.marshalBytesForClashRuleSetIPCIDROut(&buf, entryCidr)
-	case typeSurgeRuleSetOut:
-		err = t.marshalBytesForSurgeRuleSetOut(&buf, entryCidr)
 	default:
 		return nil, lib.ErrNotSupportedFormat
 	}
@@ -104,54 +88,6 @@ func (t *textOut) marshalBytesForTextOut(buf *bytes.Buffer, entryCidr []string) 
 		buf.WriteString(cidr)
 		buf.WriteString("\n")
 	}
-	return nil
-}
-
-func (t *textOut) marshalBytesForClashRuleSetClassicalOut(buf *bytes.Buffer, entryCidr []string) error {
-	buf.WriteString("payload:\n")
-	for _, cidr := range entryCidr {
-		ip, _, err := net.ParseCIDR(cidr)
-		if err != nil {
-			return err
-		}
-		if ip.To4() != nil {
-			buf.WriteString("  - IP-CIDR,")
-		} else {
-			buf.WriteString("  - IP-CIDR6,")
-		}
-		buf.WriteString(cidr)
-		buf.WriteString("\n")
-	}
-
-	return nil
-}
-
-func (t *textOut) marshalBytesForClashRuleSetIPCIDROut(buf *bytes.Buffer, entryCidr []string) error {
-	buf.WriteString("payload:\n")
-	for _, cidr := range entryCidr {
-		buf.WriteString("  - '")
-		buf.WriteString(cidr)
-		buf.WriteString("'\n")
-	}
-
-	return nil
-}
-
-func (t *textOut) marshalBytesForSurgeRuleSetOut(buf *bytes.Buffer, entryCidr []string) error {
-	for _, cidr := range entryCidr {
-		ip, _, err := net.ParseCIDR(cidr)
-		if err != nil {
-			return err
-		}
-		if ip.To4() != nil {
-			buf.WriteString("IP-CIDR,")
-		} else {
-			buf.WriteString("IP-CIDR6,")
-		}
-		buf.WriteString(cidr)
-		buf.WriteString("\n")
-	}
-
 	return nil
 }
 

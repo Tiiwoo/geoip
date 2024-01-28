@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Loyalsoldier/geoip/lib"
+	"github.com/Tiiwoo/geoip/lib"
 	"github.com/oschwald/maxminddb-golang"
 )
 
