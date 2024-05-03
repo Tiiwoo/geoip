@@ -50,7 +50,7 @@ jobs:
         run: |
           cd ./output/maxmind || exit 1
           go install -v github.com/maxmind/mmdbverify@latest
-          for name in $(ls *.mmdb); do 
+          for name in $(ls *.mmdb); do
             $(go env GOPATH)/bin/mmdbverify -file ${name}
           done
 
